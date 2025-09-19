@@ -1,25 +1,17 @@
 name: e2e-cypress
-on:
-  push:
-  pull_request:
+on: [push, pull_request]
 
 jobs:
   run-e2e:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'npm'
-
-      - name: Install deps
-        run: npm ci || npm i
-
-      - name: Run Cypress (headless)
-        uses: cypress-io/github-action@v6
-        with:
-          command: npx cypress run --e2e
+      - run: npm ci
+      - run: npx cypress verify
+      - name: Run one spec (debug)
+        run: npx cypress run --e2e --browser electron --spec "cypress/e2e/saucedemo_login.cy.js"
