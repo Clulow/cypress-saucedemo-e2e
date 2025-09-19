@@ -1,0 +1,25 @@
+name: e2e-cypress
+on:
+  push:
+  pull_request:
+
+jobs:
+  run-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci || npm i
+
+      - name: Run Cypress (headless)
+        uses: cypress-io/github-action@v6
+        with:
+          command: npx cypress run --e2e
