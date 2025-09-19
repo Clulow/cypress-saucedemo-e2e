@@ -1,0 +1,1 @@
+import './commands'; // (registra el comando custom)
